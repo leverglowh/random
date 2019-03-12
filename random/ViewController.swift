@@ -13,8 +13,12 @@ class ViewController: NSViewController {
 
     @IBOutlet weak var ok: NSTextField!
     @IBOutlet weak var wordToKnow: NSTextField!
-    var dataArray:[String] = []
+    @IBOutlet weak var loaded: NSTextField!
     
+    
+    var dataArray:[String] = []
+    var path: String?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +32,40 @@ class ViewController: NSViewController {
         }
     }
     @IBAction func LoadFromFile(_ sender: Any) {
-        let path = Bundle.main.path(forResource:"dict", ofType:"txt")
-        let text = try! String(contentsOfFile:path!, encoding: String.Encoding.utf8)
-        dataArray = text.components(separatedBy: "\n")
-        ok.stringValue = "ok"
+        
+        let dialog = NSOpenPanel();
+        
+        dialog.title                   = "Choose a .txt file";
+        dialog.showsResizeIndicator    = true;
+        dialog.showsHiddenFiles        = false;
+        dialog.canChooseDirectories    = true;
+        dialog.canCreateDirectories    = true;
+        dialog.allowsMultipleSelection = false;
+        dialog.allowedFileTypes        = ["txt"];
+        if (dialog.runModal() == NSApplication.ModalResponse.OK) {
+            let result = dialog.url // Pathname of the file
+        
+            if (result != nil) {
+                path = result!.path
+                ok.stringValue = "Click load"
+            }
+        } else {
+            path = nil
+            ok.stringValue = "not ok"
         }
         
+        }
+        
+    
+    @IBAction func loadFile(_ sender: NSButton) {
+        if (path != nil) {
+            let text = try! String(contentsOfFile:path!, encoding: String.Encoding.utf8)
+            dataArray = text.components(separatedBy: "\n")
+            loaded.stringValue = "ok."
+        } else {
+            loaded.stringValue = "errore."
+        }
+    }
     
     @IBAction func tryMe(_ sender: Any) {
         let i = Int(arc4random_uniform(_:UInt32(dataArray.count)))
