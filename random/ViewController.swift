@@ -10,12 +10,12 @@ import Cocoa
 
 
 class ViewController: NSViewController {
-
-    @IBOutlet weak var ok: NSTextField!
     @IBOutlet weak var wordToKnow: NSTextField!
-    @IBOutlet weak var loaded: NSTextField!
-    @IBOutlet weak var reverseStatus: NSTextField!
+    @IBOutlet weak var solution: NSTextField!
     
+    @IBOutlet weak var ok: NSButton!
+    @IBOutlet weak var loaded: NSButton!
+    @IBOutlet weak var reverseStatus: NSButton!
     
     var dataArray:[String] = []
     var path: String?
@@ -23,7 +23,6 @@ class ViewController: NSViewController {
     var rightVal: String = ""
     var left_array:[String] = []
     var right_array:[String] = []
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,11 +51,12 @@ class ViewController: NSViewController {
         
             if (result != nil) {
                 path = result!.path
-                ok.stringValue = "Click load"
+                ok.title = "Click load"
+                loaded.title = "load"
             }
         } else {
             path = nil
-            ok.stringValue = "not ok"
+            ok.title = "not ok"
         }
         
     }
@@ -69,13 +69,18 @@ class ViewController: NSViewController {
             let splitArray = dataArray.split()
             left_array = splitArray.left
             right_array = splitArray.right
-            loaded.stringValue = "ok"
+            print(left_array.count)
+            print(right_array.count)
+            loaded.title = "ok"
         } else {
-            loaded.stringValue = "errore"
+            loaded.title = "errore"
         }
     }
     
     @IBAction func tryMe(_ sender: Any) {
+        
+        ok.title = "Load file"
+        loaded.title = "Load!"
         
         if left_array.count==0 {
             wordToKnow.stringValue = "Finitooo"
@@ -91,20 +96,21 @@ class ViewController: NSViewController {
             
         }
         
-        reverseStatus.stringValue = ""
-        
+        reverseStatus.title = "Reverse (S)"
+        solution.stringValue = ""
     }
     
     
     @IBAction func reverseRemove(_ sender: NSButton) {
         left_array.append(leftVal)
         right_array.append(rightVal)
-        reverseStatus.stringValue = "ok"
+        reverseStatus.title = "ok"
     }
     
     @IBAction func giveUp(_ sender: NSButton) {
-        wordToKnow.stringValue = wordToKnow.stringValue + " " + rightVal
-        reverseStatus.stringValue = ""
+            solution.stringValue = rightVal
+            reverseStatus.stringValue = "Reverse (S)"
+        
     }
     
 }
